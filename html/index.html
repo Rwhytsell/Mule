@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Mule</title>
+        <link rel="stylesheet" href="./../node_modules/bootstrap/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="./../css/main.css">
+        <script defer src="./../font-awesome/fontawesome-all.js"></script>
+        <script src="./../src/renderer.js"></script>
+        <script>
+            (function () {
+                readFolder('/');
+            })();
+        </script>
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div class="row">
+                <div id="side-bar" class="col-sm-3">
+                    Shortcuts go here
+                </div>
+                <div id="content" class="col-sm-5">
+                    <div id="nav-bar">
+                        <div id="back" ondblclick=""><i class="fas fa-angle-left fa-2x"></i></div>
+                        <p class="path path-border" id="path"></p>
+                    </div>
+                    <div id="listed-files"></div>
+                </div>
+            </div>
+        </div>
+        <script>
+            require('./../src/renderer');
+        </script>
+    </body>
+</html>

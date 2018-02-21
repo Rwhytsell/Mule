@@ -1,0 +1,37 @@
+ol{
+    list-style:none;
+}
+
+li {
+    cursor: pointer;
+}
+li:hover {
+    background-color: #999999
+}
+
+#side-bar {
+    background-color: #555555;
+    color: whitesmoke;
+    position: fixed;
+    left: 0;
+    height: 100%;
+}
+
+#content {
+    left: 30%;
+}
+
+#back {
+    float: left;
+}
+
+#path {
+    margin-left: 5vw;
+    margin-top: 2vh;
+}
+
+.path-border {
+    border: #888888;
+    border-style: solid;
+    padding: 3px;
+}
