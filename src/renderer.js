@@ -1,19 +1,27 @@
 const fs = require('fs');
 const {shell} = require('electron');
+const os = require('os')
+const path = require('path');
 
-function readFolder(path) {
-    fs.readdir(path, (err, files) => {
+var home = os.homedir();
+home = home.replace(/\\/g, '/') + '/';
+console.log(home);
+
+function readFolder(newFolder) {
+    if(newFolder == 'init'){ newFolder = home;}
+    console.log(newFolder);
+    fs.readdir(newFolder, (err, files) => {
         if (err) throw err;
         else{
-            document.getElementById('back').setAttribute("ondblclick", `prevDirectory("${path}")`)
-            document.getElementById('path').innerHTML = path;
+            document.getElementById('back').setAttribute("ondblclick", `readFolder("${path.dirname(newFolder).split(path.sep).pop() + '/'}")`)
+            document.getElementById('path').innerHTML = newFolder;
             document.getElementById('listed-files').innerHTML = `<ol id="display-files"></ol>`;
             for (let file of files){
                 if(file.charAt(0) != '.'){
-                    fs.stat(path+file, (err, stats) => {
+                    fs.stat(newFolder+file, (err, stats) => {
                         if(err) throw err;
                         else{
-                            let id = `${path}${file}/`;
+                            let id = `${newFolder}${file}/`;
                             if(stats.isDirectory()){
                                 document.getElementById('display-files').innerHTML += `<li id=${id} ondblclick="readFolder(this.id)"><i class="fa fa-folder-open"></i> ${file}</li>`;
                             }
@@ -28,21 +36,6 @@ function readFolder(path) {
     });
 }
 
-function openFile(path) {
-    shell.openItem(path);
-}
-
-function prevDirectory(path) {
-    console.log(path);
-    if(path.length != 1){
-        for(let i = (path.length-2); i >= 0; i--)
-        {
-            if(path[i]=='/'){
-                let newPath = path.slice(0,i+1);
-                console.log(newPath);
-                readFolder(newPath);
-                return;
-            }
-        }
-    }
+function openFile(file) {
+    shell.openItem(file);
 }
