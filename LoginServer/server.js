@@ -35,10 +35,10 @@ app.post('/api/login', function(req, res) {
             .then(res => console.log(res.rows[0]))
             .then(client.end())
             .catch(err => console.error(err.stack));
-        }
-        else{
+        } else {
             console.error('Problem hashing password');
         }
+    });
 });
 
 // router.get('/mule', function(req, res) {});
