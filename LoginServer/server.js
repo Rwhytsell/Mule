@@ -7,7 +7,6 @@ const configFile = require('./config.json')
 
 var dbConfig = configFile.db;
 
-console.log(dbConfig);
 const client = new Client(dbConfig);
 
 var app = express();
@@ -28,7 +27,7 @@ app.post('/api/login', function(req, res) {
     const text = 'INSERT INTO user(email, pass_hash, date_created, name) VALUES($1, $2, NOW(), $3) RETURNING *';     // valueFormat = ['EMAIL', 'PASS_HASH', 'USERS_NAME', 'NAME']
     bcrypt.hash(data.password, 10, function(err, hash) {
         if(!err){
-            const values = [data.email, hash, data.username, data.name];
+            const values = [data.email, hash, data.name];
             console.log(values);
             // Connect to db and insert new user
             client.connect();
