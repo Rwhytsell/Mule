@@ -31,17 +31,14 @@ app.post('/api/login', function(req, res) {
             console.log(values);
             // Connect to db and insert new user
             client.connect();
-            client.query(text, values, (err, res) => {
-                if(err){
-                    console.error(err.stack)
-                }
-                console.log(res.rows[0]);
-                client.end();
-            });
-        } else {
+            client.query(text, values)
+            .then(res => console.log(res.rows[0]))
+            .then(client.end())
+            .catch(err => console.error(err.stack));
+        }
+        else{
             console.error('Problem hashing password');
         }
-    })
 });
 
 // router.get('/mule', function(req, res) {});
