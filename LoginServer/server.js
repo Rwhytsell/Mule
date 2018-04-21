@@ -33,7 +33,8 @@ app.post('/api/login', function(req, res) {
             client.connect();
             client.query(text, values)
             .then(res => {console.log(res.rows[0])})
-            .catch(e => console.error(e.stack));
+            .catch(e => console.error(e.stack))
+            .finally(client.end());
         } else {
             console.error('Problem hashing password');
         }
