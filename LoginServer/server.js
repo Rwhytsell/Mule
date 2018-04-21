@@ -31,10 +31,10 @@ app.post('/api/login', function(req, res) {
             console.log(values);
             // Connect to db and insert new user
             client.connect();
-            client.query(text, values)
-            .then(res => {console.log(res.rows[0])})
-            .catch(e => console.error(e.stack))
-            .lastly(client.end());
+            client.query(text, values, (err, res) => {
+                console.log(res.rows[0]);
+                client.end();
+            }).catch(e => console.error(e.stack));
         } else {
             console.error('Problem hashing password');
         }
