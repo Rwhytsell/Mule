@@ -29,16 +29,16 @@ app.post('/api/login', function(req, res) {
         if(!err){
             const values = [data.email, hash, data.name];
             console.log(values);
-            // Connect to db and insert new user
-            client.connect();
-            client.query(text, values)
-            .then(res => console.log(res.rows[0]))
+            client.connect(); // Connect to db
+            client.query(text, values) // Insert new user
+            .then(dat => res.send(dat.rows[0]))
             .then(client.end())
             .catch(err => console.error(err.stack));
         } else {
-            console.error('Problem hashing password');
+            res.send('Problem hashing password');
         }
     });
+
 });
 
 // router.get('/mule', function(req, res) {});
