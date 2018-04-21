@@ -32,9 +32,12 @@ app.post('/api/login', function(req, res) {
             // Connect to db and insert new user
             client.connect();
             client.query(text, values, (err, res) => {
+                if(err){
+                    console.error(err.stack)
+                }
                 console.log(res.rows[0]);
                 client.end();
-            }).catch(e => console.error(e.stack));
+            });
         } else {
             console.error('Problem hashing password');
         }
