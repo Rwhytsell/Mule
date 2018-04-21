@@ -16,10 +16,12 @@ var port = 8080;
 
 var router = express.Router();
 
-router.get('/user' , function(req, res){
+// router.get('/user' , function(req, res) {});
     
 
-router.post('/login', function(req, res) {
+app.post('/api/login', function(req, res) {
+    console.log('Post on login');
+
     const text = 'INSERT INTO users(name, email) VALUES($1, $2, NOW(), $3) RETURNING *'
     const values = ['EMAIL', 'PASS_HASH', 'USERS_NAME']
 
@@ -30,19 +32,13 @@ router.post('/login', function(req, res) {
         console.log(res.rows[0])
     })
     .catch(e => console.error(e.stack))
-    })
-    
-});
+    });
 
-router.get('/mule', function(req, res) {
+// router.get('/mule', function(req, res) {});
 
-});
+// router.post('/mule', function(req, res) {});
 
-router.post('/mule', function(req, res) {
-
-});
-
-app.use('/api', router)
+// app.use('/api', router)
 
 app.listen(port);
 console.log('Server has been started on port ' + port);
