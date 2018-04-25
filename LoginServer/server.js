@@ -26,13 +26,13 @@ app.post('/api/login', function(req, res) {
     const data = req.body.data;
     bcrypt.hash(data.password, 10, function(err, hash) {
         if(!err){
-            const text = "INSERT INTO user(id, email, pass_hash, date_created, name)" +
-            " VALUES(nextval('user_id_seq'), " + data.email + "," + hash + ", NOW()," + data.name + ");";
+            const text = 'INSERT INTO "user"(email, pass_hash, date_created, name) VALUES($1,$2,NOW(),$3);';
+            const values = [data.email, hash, data.name];
             console.log(text);
             client.connect()
                 .then(() => {
                     console.log('Client Connected')
-                    client.query(text)
+                    client.query(text, values)
                         .then(dat => res.send(dat.rows[0]))
                         .then(() => {
                             client.end();
