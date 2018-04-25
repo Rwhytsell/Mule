@@ -1,13 +1,13 @@
 const express = require('express')
 const bodyParser = require('body-parser')
-const { Client } = require('pg')
+const { Pool } = require('pg')
 const bcrypt = require('bcrypt')
 
 const configFile = require('./config.json')
 
 var dbConfig = configFile.db;
 
-const client = new Client(dbConfig);
+const pool = new Pool(dbConfig);
 
 var app = express();
 
@@ -29,20 +29,29 @@ app.post('/api/register', function(req, res) {
             const text = 'INSERT INTO "user"(email, pass_hash, date_created, name) VALUES($1,$2,NOW(),$3) RETURNING *;';
             const values = [data.email, hash, data.name];
             console.log(text);
-            client.connect()
-                .then(() => {
-                    console.log('Client Connected')
-                    return client.query(text, values)
-                })
-                .then(dat => () => {
+            pool.connect((err, client, done) => {
+                client.query(text, values)
+                .then((dat) => {
+                    done();
                     res.send(dat.rows[0]);
                     console.log(dat);
                 })
-                .then(() => { 
-                    client.end();
-                    console.log('Client ended');
-                })
                 .catch(err => res.send(err.stack));
+            })
+            
+                // .then(() => {
+                //     console.log('Client Connected')
+                //     return client.query(text, values)
+                // })
+                // .then((dat) => {
+                //     res.send(dat.rows[0]);
+                //     console.log(dat);
+                // })
+                // .then(() => { 
+                //     client.end();
+                //     console.log('Client ended');
+                // })
+                // .catch(err => res.send(err.stack));
 
         } else {
             res.send('Problem hashing password');
