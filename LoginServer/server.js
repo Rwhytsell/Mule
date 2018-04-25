@@ -27,7 +27,7 @@ app.post('/api/login', function(req, res) {
     bcrypt.hash(data.password, 10, function(err, hash) {
         if(!err){
             const text = "INSERT INTO user(id, email, pass_hash, date_created, name)" +
-            " VALUES(nextval('user_id_seq'), " + data.email + "," + hash + ", NOW()," + data.name + ") RETURNING *;"; // valueFormat = ['EMAIL', 'PASS_HASH', 'NAME']
+            " VALUES(nextval('user_id_seq'), " + data.email + "," + hash + ", NOW()," + data.name + ");";
             console.log(text);
             client.connect()
                 .then(() => {
