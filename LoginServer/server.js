@@ -18,13 +18,15 @@ var port = 8080;
 
 var router = express.Router();
 
+const secret = 'secret';
+
 // router.get('/user' , function(req, res) {});
     
 
 app.post('/api/register', function(req, res) {
     console.log('Post on register');
     const data = req.body.data;
-    bcrypt.hash(data.password, 10, function(err, hash) {
+    bcrypt.hash(data.password, secret, function(err, hash) {
         if(!err){
             const text = 'INSERT INTO "user"(email, pass_hash, date_created, name) VALUES($1,$2,NOW(),$3) RETURNING *;';
             const values = [data.email, hash, data.name];
