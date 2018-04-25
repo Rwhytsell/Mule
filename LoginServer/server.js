@@ -32,7 +32,7 @@ app.post('/api/login', function(req, res) {
             client.connect()
                 .then(() => {
                     console.log('Client Connected')
-                    client.query(text, values)
+                    client.query(text)
                         .then(dat => res.send(dat.rows[0]))
                         .then(() => {
                             client.end();
