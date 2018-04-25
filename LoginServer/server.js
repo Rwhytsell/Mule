@@ -32,17 +32,18 @@ app.post('/api/register', function(req, res) {
             client.connect()
                 .then(() => {
                     console.log('Client Connected')
-                    client.query(text, values)
-                        .then(dat => () => {res.send(dat.rows[0])})
-                        .catch(err => () => {
-                            res.send(err.stack);
-                        });
+                    return client.query(text, values)
                 })
-                .catch(err => res.send(err.stack))
-                .then(() => {
+                .then(dat => () => {
+                    res.send(dat.rows[0]);
+                    console.log(dat);
+                })
+                .then(() => { 
                     client.end();
                     console.log('Client ended');
-                });
+                })
+                .catch(err => res.send(err.stack));
+
         } else {
             res.send('Problem hashing password');
         }
