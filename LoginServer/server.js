@@ -33,14 +33,16 @@ app.post('/api/register', function(req, res) {
                 .then(() => {
                     console.log('Client Connected')
                     client.query(text, values)
-                        .then(dat => res.send(dat.rows[0]))
+                        .then(dat => () => {res.send(dat.rows[0])})
                         .catch(err => () => {
                             res.send(err.stack);
                         });
                 })
-                .catch(err => res.send(err.stack));
-                client.end();
-                console.log('Client ended');
+                .catch(err => res.send(err.stack))
+                .then(() => {
+                    client.end();
+                    console.log('Client ended');
+                });
         } else {
             res.send('Problem hashing password');
         }
