@@ -24,11 +24,11 @@ var router = express.Router();
 app.post('/api/login', function(req, res) {
     console.log('Post on login');
     const data = req.body.data;
-    const text = "INSERT INTO user(id, email, pass_hash, date_created, name) VALUES($1, $2, $3, $4, $5) RETURNING *"; // valueFormat = ['EMAIL', 'PASS_HASH', 'NAME']
     bcrypt.hash(data.password, 10, function(err, hash) {
         if(!err){
-            const values = ["nextval('user_id_seq'", data.email, hash, Date.now(), data.name];
-            console.log(values);
+            const text = "INSERT INTO user(id, email, pass_hash, date_created, name)" +
+            " VALUES(nextval('user_id_seq'), " + data.email + "," + hash + ", NOW()," + data.name + ") RETURNING *;"; // valueFormat = ['EMAIL', 'PASS_HASH', 'NAME']
+            console.log(text);
             client.connect()
                 .then(() => {
                     console.log('Client Connected')
@@ -38,7 +38,10 @@ app.post('/api/login', function(req, res) {
                             client.end();
                             console.log('Client Disconnected');
                         })
-                        .catch(err => res.send(err.stack));
+                        .catch(err => () => {
+                            res.send(err.stack);
+                            client.end();
+                        });
                 })
                 .catch(err => res.send(err.stack));
         } else {
