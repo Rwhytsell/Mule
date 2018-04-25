@@ -21,12 +21,12 @@ var router = express.Router();
 // router.get('/user' , function(req, res) {});
     
 
-app.post('/api/login', function(req, res) {
-    console.log('Post on login');
+app.post('/api/register', function(req, res) {
+    console.log('Post on register');
     const data = req.body.data;
     bcrypt.hash(data.password, 10, function(err, hash) {
         if(!err){
-            const text = 'INSERT INTO "user"(email, pass_hash, date_created, name) VALUES($1,$2,NOW(),$3);';
+            const text = 'INSERT INTO "user"(email, pass_hash, date_created, name) VALUES($1,$2,NOW(),$3) RETURNING *;';
             const values = [data.email, hash, data.name];
             console.log(text);
             client.connect()
@@ -34,16 +34,13 @@ app.post('/api/login', function(req, res) {
                     console.log('Client Connected')
                     client.query(text, values)
                         .then(dat => res.send(dat.rows[0]))
-                        .then(() => {
-                            client.end();
-                            console.log('Client Disconnected');
-                        })
                         .catch(err => () => {
                             res.send(err.stack);
-                            client.end();
                         });
                 })
                 .catch(err => res.send(err.stack));
+                client.end();
+                console.log('Client ended');
         } else {
             res.send('Problem hashing password');
         }
