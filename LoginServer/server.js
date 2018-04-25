@@ -56,7 +56,7 @@ app.post('/api/register', function(req, res) {
                 // .catch(err => res.send(err.stack));
 
         } else {
-            res.send('Problem hashing password');
+            res.send(err);
         }
     });
 });
