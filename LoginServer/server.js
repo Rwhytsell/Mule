@@ -26,7 +26,7 @@ app.post('/api/register', function(req, res) {
     const data = req.body.data;
     bcrypt.hash(data.password, 10, function(err, hash) {
         if(!err){
-            const text = 'INSERT INTO "user"(email, pass_hash, date_created, name) VALUES($1,$2,NOW(),$3) RETURNING *;';
+            const text = 'INSERT INTO "user"(email, pass_hash, date_created, name) VALUES($1,$2,NOW(),$3) RETURNING id;';
             const values = [data.email, hash, data.name];
             console.log(text);
             pool.connect((err, client, done) => {
@@ -62,7 +62,7 @@ app.post('/api/login', function(req, res) {
     });
 });
 
-router.get('/mule', function(req, res) {
+router.post('/mule', function(req, res) {
     const data = req.body.data
     const user = data.userid
     const mule = data.muleid
@@ -94,7 +94,7 @@ router.post('/mule', function(req, res) {
         .then((dat) => {
             done();
             console.log(dat)
-            // Return the new mules id
+            res.send(dat.rows[0])
         })
     })
 });
