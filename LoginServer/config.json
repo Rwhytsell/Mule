@@ -1,9 +1,9 @@
 {
     "db": {
-        "user" : "USERNAME", 
-        "host" : "HOSTNAME",
-        "database" : "DATABASENAME",
-        "password" : "DATABASEPASSWORD",
-        "port" : "DATABASEPORT"
+        "user" : "muleapi", 
+        "host" : "localhost",
+        "database" : "muledb",
+        "password" : "Hd9862adsf",
+        "port" : "5432"
     }
 }
