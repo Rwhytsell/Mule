@@ -35,6 +35,7 @@ app.post('/api/register', function(req, res) {
                     done();
                     res.send(dat.rows[0]);
                     console.log(dat);
+                    // Generate a token and return that
                 })
                 .catch(err => res.send(err.stack));
             })
@@ -55,15 +56,48 @@ app.post('/api/login', function(req, res) {
             done();
             console.log(dat)
             bcrypt.compare(data.password, dat.rows[0].pass_hash).then(function(result) {
-                console.log(result)
+                console.log(result)  // Generate a token and return that
             });
         })
     });
 });
 
-// router.get('/mule', function(req, res) {});
+router.get('/mule', function(req, res) {
+    const data = req.body.data
+    const user = data.userid
+    const mule = data.muleid
 
-// router.post('/mule', function(req, res) {});
+    // Check users token
+
+    const query = 'SELECT * FROM "mule" WHERE master_user=$1'
+    pool.connect((err, client, done) => {
+        client.query(query, user)
+        .then((dat) => {
+            done();
+            console.log(dat)
+            // Return a list of the users mules
+        })
+    })
+});
+
+router.post('/mule', function(req, res) {
+    const data = req.body.data
+    const user = data.userid
+    const ip = data.ip
+    const port = data.port
+    const name = data.name
+    const query = 'INSERT INTO "mule"(master_user, ip, port, name, last_seen) VALUES($1,$2,$3,$4,NOW()) RETURNING id;'
+    const values = [user,ip,port,name]
+
+    pool.connect((err, client, done) => {
+        client.query(query, values)
+        .then((dat) => {
+            done();
+            console.log(dat)
+            // Return the new mules id
+        })
+    })
+});
 
 app.listen(port);
 console.log('Server has been started on port ' + port);
