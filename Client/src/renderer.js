@@ -1,6 +1,6 @@
 const fs = require('fs');
 const {shell} = require('electron');
-const os = require('os')
+const os = require('os');
 const path = require('path');
 
 var home = os.homedir(); // Home directory will be on the API as well
